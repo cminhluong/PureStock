@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:padding="10dp"
     tools:context=".Fragement.ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+   
+    <Button
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="profile page" />
+        android:layout_height="wrap_content"
+        android:id="@+id/transaction"
+        android:hint="Transaction"
+        android:layout_marginTop="15dp"
+        android:padding="10dp"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-</FrameLayout>
+
+</LinearLayout>

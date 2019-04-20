@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
 //                                        Toast.makeText(LoginActivity.this, "Authentication failed!", Toast.LENGTH_SHORT).show();
 //                                    }
 //                                }
-                    
+
 //                            });
                     UserService uService=new UserService(LoginActivity.this);
                     boolean flag=uService.login(str_username, str_password);
