@@ -92,8 +92,8 @@ public class LoginActivity extends AppCompatActivity {
 //                                }
 
 //                            });
-                    UserService uService=new UserService(LoginActivity.this);
-                    boolean flag=uService.login(str_username, str_password);
+                    UserService uService = new UserService(LoginActivity.this);
+                    boolean flag = uService.login(str_username, str_password);
                     if(flag){
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);

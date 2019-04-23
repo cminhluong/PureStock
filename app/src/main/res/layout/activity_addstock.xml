@@ -1,30 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_gravity="center"
     android:padding="10dp"
-    tools:context=".Fragement.ProfileFragment">
+    tools:context=".addstock">
 
-    <!-- TODO: Update blank fragment layout -->
-   
-    <Button
+
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/transaction"
-        android:hint="Transaction"
-        android:layout_marginTop="15dp"
+        android:hint="StockId"
+        android:id="@+id/StockId"
         android:padding="10dp"
         />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="companyname"
+        android:layout_marginTop="15dp"
+        android:id="@+id/companyname"
+        android:padding="10dp"
+        />
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/add_stock"
-        android:hint="Add_Stock"
-        android:layout_marginTop="15dp"
-        android:padding="10dp" />
-
+        android:id="@+id/submit_stock"
+        android:text="Submit"
+        android:textColor="@color/colorPrimary"
+        android:background="@drawable/button_background"
+        android:layout_marginTop="10dp"/>
 
 </LinearLayout>

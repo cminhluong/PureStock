@@ -13,10 +13,12 @@ import android.widget.Button;
 import com.example.purestock.MainActivity;
 import com.example.purestock.R;
 import com.example.purestock.TransactionActivity;
+import com.example.purestock.addstock;
 
 public class ProfileFragment extends Fragment {
 
     Button trans;
+    Button add_stock;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -25,11 +27,18 @@ public class ProfileFragment extends Fragment {
 
         View view = inflater.inflate( R.layout.fragment_profile, container,  false);
         trans = view.findViewById( R.id.transaction );
-
+        add_stock = view.findViewById( R.id.add_stock );
         trans.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity( new Intent( getContext(), TransactionActivity.class ) );
+            }
+        } );
+
+        add_stock.setOnClickListener( new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                startActivity( new Intent( getContext(), addstock.class ) );
             }
         } );
 

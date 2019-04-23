@@ -7,28 +7,49 @@
     android:orientation="vertical"
     android:layout_gravity="center"
     tools:context=".TransactionActivity">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:text="Transaction"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Username"
+        android:id="@+id/Trans_Username"
+        android:padding="10dp"
+        />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="stock ID"
         android:layout_marginTop="15dp"
-        android:id="@+id/stockID"
+        android:id="@+id/Trans_stockID"
         android:padding="10dp"
         />
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="price"
         android:layout_marginTop="15dp"
-        android:id="@+id/price"
+        android:id="@+id/Trans_price"
         android:padding="10dp"
         />
+
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"/>
+
+    <!--<EditText-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:hint="Date"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:id="@+id/Trans_date"-->
+        <!--android:padding="10dp"-->
+        <!--/>-->
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
