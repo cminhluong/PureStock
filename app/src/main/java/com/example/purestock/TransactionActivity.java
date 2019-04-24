@@ -25,7 +25,7 @@ import java.util.Locale;
 public class TransactionActivity extends AppCompatActivity {
 
     Button submit;
-    EditText username, stock_id, price;
+    EditText username, stock_id, price, numbs;
    // Spinner dropdown = findViewById(R.id.spinner1);
 
     com.example.purestock.DatabaseHelper database;
@@ -39,6 +39,7 @@ public class TransactionActivity extends AppCompatActivity {
         username = findViewById( R.id.Trans_Username );
         stock_id = findViewById( R.id.Trans_stockID );
         price = findViewById( R.id.Trans_price );
+        numbs = findViewById( R.id.Trans_num );
        // date = findViewById( R.id.Trans_date );
 
 
@@ -56,6 +57,7 @@ public class TransactionActivity extends AppCompatActivity {
                 String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
                 //String str_date = date.getText().toString();
                 String str_price = price.getText().toString();
+                String str_num = numbs.getText().toString();
 
                 /*UserService userService = new UserService.(TransactionActivity.this);
                 User str_username = userService.getCurrentUser();
@@ -74,13 +76,15 @@ public class TransactionActivity extends AppCompatActivity {
 
           */
 
+        //(String username, String stockID, double price, int numberStocks, boolean type, String date)
                 double double_price = Double.parseDouble( str_price );
-
+                int int_num = Integer.parseInt(str_num);
                 if(TextUtils.isEmpty( str_username ) || TextUtils.isEmpty( str_stock_id )
                 || TextUtils.isEmpty( str_price )){
                     Toast.makeText( TransactionActivity.this, "All fileds are required!", Toast.LENGTH_SHORT ).show();
                 } else{
-                    Boolean insertTrans = database.insertTransaction( str_username, str_stock_id, double_price, true, date);
+                    Boolean insertTrans = database.insertTransaction( str_username, str_stock_id, double_price, int_num, true, date);
+
 
                     if (insertTrans){
                         Toast.makeText(TransactionActivity.this, "Success add transaction", Toast.LENGTH_SHORT).show();

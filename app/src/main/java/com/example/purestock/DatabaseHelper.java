@@ -4,8 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "StockDiaryDatabase";    // Database Name
     public static final String USERS_TABLE = "USER";
@@ -21,8 +19,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TRANSACTIONS_COL_2 = "UID";
     private static final String TRANSACTIONS_COL_3 = "SID";
     private static final String TRANSACTIONS_COL_4 = "PRICE";
-    private static final String TRANSACTIONS_COL_5 = "TYPE";
-    private static final String TRANSACTIONS_COL_6 = "DATE";
+    private static final String TRANSACTIONS_COL_5 = "NUMBER_STOCK";            // Add stock number column (04/17/2019)
+    private static final String TRANSACTIONS_COL_6 = "TYPE";
+    private static final String TRANSACTIONS_COL_7 = "DATE";
     public static final String WATCHLISTS_TABLE = "WATCHLISTS";
     private static final String WATCHLISTS_COL_1 = "ID";
     private static final String WATCHLISTS_COL_2 = "NAME";
@@ -43,8 +42,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             STOCKS_COL_2 + " VARCHAR(100) NOT NULL)";
     private static final String CREATE_TABLE_TRANSACTIONS = "CREATE TABLE IF NOT EXISTS " + TRANSACTIONS_TABLE + " (" + TRANSACTIONS_COL_1 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             TRANSACTIONS_COL_2 + " CHAR(20) NOT NULL, " + TRANSACTIONS_COL_3 + " CHAR(10) NOT NULL, " +
-            TRANSACTIONS_COL_4 + " DOUBLE NOT NULL, " + TRANSACTIONS_COL_5 + " BOOLEAN NOT NULL, " +
-            TRANSACTIONS_COL_6 + " DATETIME NOT NULL, " +
+            TRANSACTIONS_COL_4 + " DOUBLE NOT NULL, " + TRANSACTIONS_COL_5 + " INT NOT NULL, " +
+            TRANSACTIONS_COL_6 + " BOOLEAN NOT NULL, " + TRANSACTIONS_COL_7 + " DATETIME NOT NULL, " +
             "FOREIGN KEY (" + TRANSACTIONS_COL_2 + ") REFERENCES " + USERS_TABLE + " (" + USERS_COL_1 + "), " +
             "FOREIGN KEY (" + TRANSACTIONS_COL_3 + ") REFERENCES " + STOCKS_TABLE + " (" + STOCKS_COL_1 + "))";
     //"PRIMARY KEY (" + TRANSACTIONS_COL_1 + ", " + TRANSACTIONS_COL_2 + "))";
@@ -93,6 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onOpen(SQLiteDatabase db) {
         db.disableWriteAheadLogging();  // Here the solution
         super.onOpen(db);
+        db.execSQL("PRAGMA foreign_keys=ON;");
     }
 
     public boolean insertUser(String username, String password, String fullname, String email)
@@ -127,15 +127,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
     }
 
-    public boolean insertTransaction(String username, String stockID, double price, boolean type, String date)
+    public boolean insertTransaction(String username, String stockID, double price, int numberStocks, boolean type, String date)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(TRANSACTIONS_COL_2, username);
         contentValues.put(TRANSACTIONS_COL_3, stockID);
         contentValues.put(TRANSACTIONS_COL_4, price);
-        contentValues.put(TRANSACTIONS_COL_5, type);
-        contentValues.put(TRANSACTIONS_COL_6, date);
+        contentValues.put(TRANSACTIONS_COL_5, numberStocks);
+        contentValues.put(TRANSACTIONS_COL_6, type);
+        contentValues.put(TRANSACTIONS_COL_7, date);
         long result = db.insert(TRANSACTIONS_TABLE, null, contentValues);
 
         if(result == -1)
@@ -148,9 +149,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(WATCHLISTS_COL_2, username);
-        contentValues.put(WATCHLISTS_COL_3, name);
-        contentValues.put(WATCHLISTS_COL_4, date);
+        contentValues.put(WATCHLISTS_COL_2, name);
+        contentValues.put(WATCHLISTS_COL_3, date);
+        contentValues.put(WATCHLISTS_COL_4, username);
         long result = db.insert(WATCHLISTS_TABLE, null, contentValues);
 
         if(result == -1)
@@ -219,7 +220,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
     }
 
-    public boolean updateTransaction(int transactionID, String username, String stockID, float price, boolean type, String date)
+    public boolean updateTransaction(int transactionID, String username, String stockID, float price, int numberStocks, boolean type, String date)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -227,8 +228,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(TRANSACTIONS_COL_2, username);
         contentValues.put(TRANSACTIONS_COL_3, stockID);
         contentValues.put(TRANSACTIONS_COL_4, price);
-        contentValues.put(TRANSACTIONS_COL_5, type);
-        contentValues.put(TRANSACTIONS_COL_6, date);
+        contentValues.put(TRANSACTIONS_COL_5, numberStocks);
+        contentValues.put(TRANSACTIONS_COL_6, type);
+        contentValues.put(TRANSACTIONS_COL_7, date);
 
         long result = db.update(TRANSACTIONS_TABLE, contentValues, TRANSACTIONS_COL_1 + " = ?",
                 new String[] {Integer.toString(transactionID)});
@@ -342,8 +344,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        long result = db.delete(WATCHLISTS_STOCKS_TABLE,WATCHLISTS_STOCKS_COL_1 + " = ? AND " +
-                WATCHLISTS_STOCKS_COL_2 + " = ?", new String[] {Integer.toString(watchlistID), stockID});
+        long result = db.delete(WATCHLISTS_STOCKS_TABLE,WATCHLISTS_STOCKS_COL_1 + "=? AND " +
+                WATCHLISTS_STOCKS_COL_2 + "=?", new String[] {Integer.toString(watchlistID), stockID});
 
         if(result == 0)
             return false;
