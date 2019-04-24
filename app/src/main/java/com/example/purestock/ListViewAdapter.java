@@ -1,6 +1,7 @@
 package com.example.purestock;
 import android.app.Activity;
 import android.graphics.Color;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ListViewAdapter extends BaseAdapter {
-    public ArrayList<HashMap<String, String>> list;
+    public ArrayList<HashMap<String, SpannableString>> list;
+    //public ArrayList<HashMap<String, String>> list;
 
     //public static final String FIRST_COLUMN="First";
     //public static final String SECOND_COLUMN="Second";
@@ -23,7 +25,8 @@ public class ListViewAdapter extends BaseAdapter {
     int itemIDs[];
     int identifyColumn;
 
-    public ListViewAdapter(Activity activity,ArrayList<HashMap<String, String>> list, int layout_id, int number_layouts, int textviewIDs[])
+    //public ListViewAdapter(Activity activity,ArrayList<HashMap<String, String>> list, int layout_id, int number_layouts, int textviewIDs[])
+    public ListViewAdapter(Activity activity,ArrayList<HashMap<String, SpannableString>> list, int layout_id, int number_layouts, int textviewIDs[])
     {
         super();
         this.activity=activity;
@@ -103,7 +106,7 @@ public class ListViewAdapter extends BaseAdapter {
             holder=(ViewHolder) convertView.getTag();
         }
 
-        HashMap<String, String> map=list.get(position);
+        HashMap<String, SpannableString> map=list.get(position);
         for(int i=0; i<numberLayouts; i++)
         {
             holder.txtLayout[i].setText(map.get(Integer.toString(i)));

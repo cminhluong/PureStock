@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,12 +51,14 @@ public class Watch_ListFragment extends Fragment {
     SwipeMenuListView displayWatchlist;
     AlphaVantageHelper avHelper;
     View view;
-    ArrayList<HashMap<String, String>> resultList;
-    ArrayList<HashMap<String, String>> resultEndpointList;
+    //ArrayList<HashMap<String, String>> resultList;
+    ArrayList<HashMap<String, SpannableString>> resultList;
+    ArrayList<HashMap<String, SpannableString>> resultEndpointList ;
     private String username;
     DatabaseHelper dbHelper;
     CommonUtilities cUtil;
     List<String> stockIDs;
+    //HashMap<String,String> stockIDs;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,27 +67,43 @@ public class Watch_ListFragment extends Fragment {
         username = "test";
     }
 
+    private String GetStockNameByID(String stockID)
+    {
+        String result = "";
+        Cursor stockCursor = dbHelper.getData("select NAME from " + DatabaseHelper.STOCKS_TABLE + " WHERE ID=\"" +
+                stockID + "\"");
+
+        if (stockCursor != null) {
+            if (stockCursor.moveToFirst()) {
+                result = stockCursor.getString(stockCursor.getColumnIndex("NAME"));
+            }
+        }
+
+        return result;
+    }
+
     private void LoadWatchlistStock()
     {
-        Cursor cursor = dbHelper.getAllData(DatabaseHelper.WATCHLISTS_STOCKS_TABLE);
+        Cursor watchlistCursor = dbHelper.getAllData(DatabaseHelper.WATCHLISTS_STOCKS_TABLE);
+        String stockID;
 
         if((stockIDs != null) && (stockIDs.size() > 0))
             stockIDs.clear();
 
         // if Cursor is contains results
-        if (cursor != null) {
+        if (watchlistCursor != null) {
 
             stockIDs = new ArrayList<String>();
-            if (cursor.moveToFirst()) {
+            int index = 0;
+
+            if (watchlistCursor.moveToFirst()) {
                 do {
-                    // Get version from Cursor
-                    String stockID = cursor.getString(cursor.getColumnIndex("SID"));
+                    stockID = watchlistCursor.getString(watchlistCursor.getColumnIndex("SID"));
 
-                    if(stockID != null)
-                        // add the bookName into the bookTitles ArrayList
+                    if(stockID != null) {
                         stockIDs.add(stockID);
-
-                } while (cursor.moveToNext());
+                    }
+                } while (watchlistCursor.moveToNext());
             }
         }
     }
@@ -120,6 +140,8 @@ public class Watch_ListFragment extends Fragment {
         {
             //add
             JSONObject json;
+            String stockID = "";
+            String stockIDNAM = "";
 
             try {
                 for(String value : searchResults) {
@@ -130,24 +152,33 @@ public class Watch_ListFragment extends Fragment {
 
                     matchedObject = json.optJSONObject("Global Quote");
                     if (matchedObject != null) {
-                        HashMap<String, String> hashmap = new HashMap<String, String>();
+                        HashMap<String, SpannableString> hashmap = new HashMap<String, SpannableString>();
 
-                        hashmap.put("0", matchedObject.getString("01. symbol"));
-                        hashmap.put("1", matchedObject.getString("05. price"));
-                        hashmap.put("2", matchedObject.getString("10. change percent"));
+                        stockID = matchedObject.getString("01. symbol");
+                        stockIDNAM = stockID + "\n" + GetStockNameByID(stockID);
+
+                        SpannableString ss1=  new SpannableString(stockIDNAM);
+                        ss1.setSpan(new RelativeSizeSpan(0.5f), stockID.length() + 1, stockIDNAM.length(), 0); // set size
+
+                        hashmap.put("0", ss1);
+                        ss1 = new SpannableString(matchedObject.getString("05. price"));
+                        hashmap.put("1", ss1);
+                        ss1 = new SpannableString(matchedObject.getString("10. change percent"));
+                        hashmap.put("2", ss1);
+                        // hashmap.put("2", matchedObject.getString("10. change percent"));
+                        //hashmap.put("1", SpannableString(matchedObject.getString("05. price")));
+                        // hashmap.put("2", matchedObject.getString("10. change percent"));
                         resultEndpointList.add(hashmap);
                     }
                 }
 
                 listviewDisplayAdapter.notifyDataSetChanged();
                 displayWatchlist.setAdapter(listviewDisplayAdapter);
-
             }
             catch (JSONException e)
             {
                 e.printStackTrace();
             }
-
         }
     }
 
@@ -184,16 +215,23 @@ public class Watch_ListFragment extends Fragment {
         protected void onPostExecute(String[] searchResults) {
             //List<String> searchContents = new ArrayList<String>();
 
-            resultList=new ArrayList<HashMap<String,String>>();
+            //resultList=new ArrayList<HashMap<String,String>>();
+            resultList=new ArrayList<HashMap<String,SpannableString>>();
             if (searchResults != null)
             {
+                SpannableString ss1 ;
                 for(int i=0; i<searchResults.length/2; i++)
                 {
-                    HashMap<String,String> hashmap=new HashMap<String, String>();
+                    //HashMap<String,String> hashmap=new HashMap<String, String>();
+                    HashMap<String,SpannableString> hashmap=new HashMap<String, SpannableString>();
                     //hashmap.put("First", searchResults[i*2]);
                     //hashmap.put("Second", searchResults[i*2+1]);
-                    hashmap.put("0", searchResults[i*2]);
-                    hashmap.put("1", searchResults[i*2+1]);
+                    ss1 =  new SpannableString(searchResults[i*2]);
+                    hashmap.put("0", ss1);
+                    ss1 =  new SpannableString(searchResults[i*2+1]);
+                    hashmap.put("1", ss1);
+                    //hashmap.put("0", searchResults[i*2]);
+                    //hashmap.put("1", searchResults[i*2+1]);
                     resultList.add(hashmap);
                 }
             }
@@ -211,15 +249,16 @@ public class Watch_ListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate( R.layout.fragment_watch__list, container, false );
-
         subSearchView = (MaterialSearchView)view.findViewById(R.id.search_view1);
         searchResult = (SwipeMenuListView)view.findViewById(R.id.watchlist_search_listview);
         displayWatchlist = (SwipeMenuListView) view.findViewById(R.id.watchlist_display_listview);
         avHelper = new AlphaVantageHelper("27KRMC96L132GI57", 2,1000);
         dbHelper = new DatabaseHelper(view.getContext());
         cUtil = new CommonUtilities();
-        resultEndpointList = new ArrayList<HashMap<String,String>>();
+        resultEndpointList = new ArrayList<HashMap<String,SpannableString>>();
         searchResult.setVisibility(View.GONE);
+
+        username = "1";
 
         int tmpIDs[] = new int[4];
 
@@ -263,9 +302,11 @@ public class Watch_ListFragment extends Fragment {
                 {
                     case 0:
                     {
-                        HashMap<String, String> tmp = (HashMap<String, String>) listviewDisplayAdapter.getItem(position);
 
-                        if(dbHelper.deleteWatchlist_Stock(1, tmp.get("0"))) {
+                        //HashMap<String, String> tmp = (HashMap<String, String>) listviewDisplayAdapter.getItem(position);
+                        HashMap<String, SpannableString> tmp = (HashMap<String, SpannableString>) listviewDisplayAdapter.getItem(position);
+
+                        if(dbHelper.deleteWatchlist_Stock(1, tmp.get("0").toString())) {
                             listviewDisplayAdapter.remove(position);
                             listviewDisplayAdapter.notifyDataSetChanged();
 
@@ -287,23 +328,6 @@ public class Watch_ListFragment extends Fragment {
         SwipeMenuCreator creator = new SwipeMenuCreator() {
             @Override
             public void create(SwipeMenu menu) {
-                // create "open" item
-                //SwipeMenuItem openItem = new SwipeMenuItem(getActivity().getApplicationContext());
-
-                // set item background
-                // openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
-                //       0xCE)));
-                // set item width
-                //openItem.setWidth(170);
-                // set item title
-                //openItem.setTitle("Add");
-                // set item title fontsize
-                //openItem.setTitleSize(18);
-                // set item title font color
-                //openItem.setTitleColor(Color.WHITE);
-                // add to menu
-                //menu.addMenuItem(openItem);
-
                 // create "delete" item
                 SwipeMenuItem addItem = new SwipeMenuItem(getActivity().getApplicationContext());
 
@@ -327,10 +351,10 @@ public class Watch_ListFragment extends Fragment {
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
-                        HashMap<String, String>  tmp = (HashMap<String, String> )listviewSearchAdapter.getItem(position);
+                        HashMap<String, SpannableString>  tmp = (HashMap<String, SpannableString> )listviewSearchAdapter.getItem(position);
+                        //HashMap<String, String>  tmp = (HashMap<String, String> )listviewSearchAdapter.getItem(position);
 
-                        dbHelper.insertUser(username, "aaaaaa", "Test Test", "test@test.com");
-                        if(dbHelper.insertStock(tmp.get("0"), tmp.get("1")))
+                        if(dbHelper.insertStock(tmp.get("0").toString(), tmp.get("1").toString()))
                             Toast.makeText(view.getContext(), "Added to Stock", Toast.LENGTH_LONG).show();
                         else
                             Toast.makeText(view.getContext(), "Existed in Stock", Toast.LENGTH_LONG).show();
@@ -340,7 +364,7 @@ public class Watch_ListFragment extends Fragment {
                         else
                             Toast.makeText(view.getContext(), "Failed to create new watch list", Toast.LENGTH_LONG).show();
 
-                        if(dbHelper.insertWatchlist_stock(1, tmp.get("0"),cUtil.getCurrentDatetime())) {
+                        if(dbHelper.insertWatchlist_stock(1, tmp.get("0").toString(),cUtil.getCurrentDatetime())) {
 
                             Toast.makeText(view.getContext(), "Added new watch list stock", Toast.LENGTH_LONG).show();
 
@@ -348,32 +372,21 @@ public class Watch_ListFragment extends Fragment {
 
 
                             avHelper.setParameter(1, "symbol=" + tmp.get("0"));
-                            stockIDs.clear();
-                            stockIDs.add(tmp.get("0"));
-                            //try {
-                            //String str_result = new ALphaVantageQuoteEndpointQuery().execute("");//.get(3000, TimeUnit.SECONDS );
+                            stockIDs.clear();                       // Only query the last added stock
+                            stockIDs.add(tmp.get("0").toString());
+
                             new ALphaVantageQuoteEndpointQuery().execute("");
-                            //displayWatchlist.invalidateViews();
-                            //} catch (TimeoutException e) {
-                            //     e.printStackTrace();
-                            // } catch (InterruptedException e) {
-                            //     e.printStackTrace();
-                            // } catch (ExecutionException e) {
-                            //     e.printStackTrace();
-                            // }
+
                         }
                         else
                             Toast.makeText(view.getContext(), "Failed to add new watch list stock", Toast.LENGTH_LONG).show();
-
-
-
 
                         break;
 
                     case 1:
                         break;
                 }
-                // false : close the menu; true : not close the menu
+
                 return false;
             }
         });
