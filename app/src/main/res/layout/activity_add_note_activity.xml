@@ -1,20 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_gravity="center"
     android:padding="10dp"
-    tools:context=".Fragement.NoteFragment">
+    tools:context=".Add_note_activity">
 
-
+    <EditText
+        android:id="@+id/add_content"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:enabled="true"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:minLines="8"
+        android:maxLines="10"
+        android:scrollbars="vertical"
+        android:background="@android:drawable/edit_text"
+        >
+    </EditText>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/add_note"
-        android:text="Add_Note"
+        android:id="@+id/note_submite"
+        android:text="Submit"
         android:textColor="@color/colorPrimary"
         android:background="@drawable/button_background"
         android:layout_marginTop="15dp"/>

@@ -10,7 +10,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String USERS_COL_1 = "USERNAME";
     private static final String USERS_COL_2 = "PASSWORD";
     private static final String USERS_COL_3 = "FULLNAME";
-    private static final String USERS_COL_4 = "EMAIL";
+
+    // add UID to the user table because we find foreign key is failed in watch list 04-25-2019
+    private static final String USERS_COL_4 = "UID";
+    private static final String USERS_COL_5 = "EMAIL";
+
     public static final String STOCKS_TABLE = "STOCKS";
     private static final String STOCKS_COL_1 = "ID";
     private static final String STOCKS_COL_2 = "NAME";
@@ -38,21 +42,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String NOTES_COL_3 = "DATE";
     private static final String NOTES_COL_4 = "UID";
 
-    private static final String CREATE_TABLE_USERS = "CREATE TABLE IF NOT EXISTS " + USERS_TABLE + " (" + USERS_COL_1 + " CHAR(20) NOT NULL PRIMARY KEY, " +
-            USERS_COL_2 + " CHAR(40) NOT NULL, " + USERS_COL_3 + " NVARCHAR(200) NOT NULL, " + USERS_COL_4 + " CHAR(200))";
+    private static final String CREATE_TABLE_USERS = "CREATE TABLE IF NOT EXISTS " + USERS_TABLE + " (" + USERS_COL_1 + " CHAR(20) NOT NULL , " +
+            USERS_COL_2 + " CHAR(40) NOT NULL, " + USERS_COL_3 + " NVARCHAR(200) NOT NULL, "+ USERS_COL_4 +  " INTEGER PRIMARY KEY AUTOINCREMENT," + USERS_COL_5 + " CHAR(200))";
     private static final String CREATE_TABLE_STOCKS = "CREATE TABLE IF NOT EXISTS " + STOCKS_TABLE + " (" + STOCKS_COL_1 + " CHAR(10) NOT NULL PRIMARY KEY, " +
             STOCKS_COL_2 + " VARCHAR(100) NOT NULL)";
     private static final String CREATE_TABLE_TRANSACTIONS = "CREATE TABLE IF NOT EXISTS " + TRANSACTIONS_TABLE + " (" + TRANSACTIONS_COL_1 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             TRANSACTIONS_COL_2 + " CHAR(20) NOT NULL, " + TRANSACTIONS_COL_3 + " CHAR(10) NOT NULL, " +
             TRANSACTIONS_COL_4 + " DOUBLE NOT NULL, " + TRANSACTIONS_COL_5 + " INT NOT NULL, " +
-            TRANSACTIONS_COL_6 + " BOOLEAN NOT NULL, " + TRANSACTIONS_COL_7 + " DATETIME NOT NULL, " +
+            TRANSACTIONS_COL_6 + " CHAR(20) NOT NULL, " + TRANSACTIONS_COL_7 + " DATETIME NOT NULL, " +
             "FOREIGN KEY (" + TRANSACTIONS_COL_2 + ") REFERENCES " + USERS_TABLE + " (" + USERS_COL_1 + "), " +
             "FOREIGN KEY (" + TRANSACTIONS_COL_3 + ") REFERENCES " + STOCKS_TABLE + " (" + STOCKS_COL_1 + "))";
     //"PRIMARY KEY (" + TRANSACTIONS_COL_1 + ", " + TRANSACTIONS_COL_2 + "))";
     private static final String CREATE_TABLE_WATCHLISTS = "CREATE TABLE IF NOT EXISTS " + WATCHLISTS_TABLE + " (" + WATCHLISTS_COL_1 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             WATCHLISTS_COL_2 + " NVARCHAR(200) NOT NULL, " + WATCHLISTS_COL_3 + " DATETIME NOT NULL, " +
-            WATCHLISTS_COL_4 + " CHAR(20) NOT NULL, " +
-            "FOREIGN KEY (" + WATCHLISTS_COL_4 + ") REFERENCES " + USERS_TABLE + " (" + USERS_COL_1 + "))";
+            WATCHLISTS_COL_4 + " INTEGER NOT NULL, " +
+            "FOREIGN KEY (" + WATCHLISTS_COL_4 + ") REFERENCES " + USERS_TABLE + " (" + USERS_COL_4 + "))";
     //"FOREIGN KEY (" + WATCHLISTS_COL_2 + ") REFERENCES " + STOCKS_TABLE + " (" + STOCKS_COL_1 + "), " +
     //"PRIMARY KEY (" + WATCHLISTS_COL_1 + ", " + WATCHLISTS_COL_2 + "))";
     private static final String CREATE_TABLE_WATCHLISTS_STOCKS = "CREATE TABLE IF NOT EXISTS " + WATCHLISTS_STOCKS_TABLE + " (" + WATCHLISTS_STOCKS_COL_1 + " INTEGER NOT NULL, " +
@@ -61,8 +65,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "FOREIGN KEY (" + WATCHLISTS_STOCKS_COL_2 + ") REFERENCES " + STOCKS_TABLE + " (" + STOCKS_COL_1 + "), " +
             "PRIMARY KEY (" + WATCHLISTS_STOCKS_COL_1 + ", " + WATCHLISTS_STOCKS_COL_2 + "))";
     private static final String CREATE_TABLE_NOTES = "CREATE TABLE IF NOT EXISTS " + NOTES_TABLE + " (" + NOTES_COL_1 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            NOTES_COL_2 + " TEXT NOT NULL, " + NOTES_COL_3 + " DATETIME NOT NULL, " + NOTES_COL_4 + " CHAR(20) NOT NULL, " +
-            "FOREIGN KEY (" + NOTES_COL_4 + ") REFERENCES " + USERS_TABLE + " (" + USERS_COL_1 + "))";
+            NOTES_COL_2 + " TEXT NOT NULL, " + NOTES_COL_3 + " DATETIME NOT NULL, " + NOTES_COL_4 + " INTEGER NOT NULL, " +
+            "FOREIGN KEY (" + NOTES_COL_4 + ") REFERENCES " + USERS_TABLE + " (" + USERS_COL_4 + "))";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -104,7 +108,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(USERS_COL_1, username);
         contentValues.put(USERS_COL_2, password);
         contentValues.put(USERS_COL_3, fullname);
-        contentValues.put(USERS_COL_4, email);
+        contentValues.put(USERS_COL_5, email);
         long result = db.insert(USERS_TABLE, null, contentValues);
 
         if(result == -1)
@@ -129,7 +133,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
     }
 
-    public boolean insertTransaction(String username, String stockID, double price, int numberStocks, boolean type, String date)
+    public boolean insertTransaction(String username, String stockID, double price, int numberStocks, String type, String date)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -222,7 +226,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
     }
 
-    public boolean updateTransaction(int transactionID, String username, String stockID, float price, int numberStocks, boolean type, String date)
+    public boolean updateTransaction(int transactionID, String username, String stockID, float price, int numberStocks, String type, String date)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -383,7 +387,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return dataset;
     }
-    
+
 
 
 }

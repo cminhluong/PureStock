@@ -14,11 +14,13 @@ import com.example.purestock.MainActivity;
 import com.example.purestock.R;
 import com.example.purestock.TransactionActivity;
 import com.example.purestock.addstock;
+import com.example.purestock.historyActivity;
 
 public class ProfileFragment extends Fragment {
 
     Button trans;
-    Button add_stock;
+    //Button add_stock;
+    Button hist;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -27,7 +29,8 @@ public class ProfileFragment extends Fragment {
 
         View view = inflater.inflate( R.layout.fragment_profile, container,  false);
         trans = view.findViewById( R.id.transaction );
-        add_stock = view.findViewById( R.id.add_stock );
+       // add_stock = view.findViewById( R.id.add_stock );
+        hist = view.findViewById( R.id.History );
         trans.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,13 +38,18 @@ public class ProfileFragment extends Fragment {
             }
         } );
 
-        add_stock.setOnClickListener( new View.OnClickListener(){
+        /*add_stock.setOnClickListener( new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 startActivity( new Intent( getContext(), addstock.class ) );
             }
+        } );*/
+        hist.setOnClickListener( new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                startActivity( new Intent( getContext(), historyActivity.class ) );
+            }
         } );
-
 
         return view ;
 

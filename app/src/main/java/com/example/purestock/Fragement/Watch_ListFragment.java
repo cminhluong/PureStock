@@ -43,6 +43,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+//04-25-2019
+/*
+* Fix bug
+* reason: foreign key can not connect to the user because the UID is not unique and esixt
+* How to solve: By change the user table add one more col for UID type to be integer and auto increasing
+ */
+
+
+
+
 public class Watch_ListFragment extends Fragment {
     MaterialSearchView subSearchView;
     ListViewAdapter listviewSearchAdapter;

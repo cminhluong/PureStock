@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,19 +16,23 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.purestock.Fragement.ProfileFragment;
 import com.example.purestock.Model.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
-public class TransactionActivity extends AppCompatActivity {
+public class TransactionActivity extends AppCompatActivity implements  AdapterView.OnItemSelectedListener{
 
     Button submit;
-    EditText stock_id, price, numbs;
+    EditText stock_id, price, numbs, type;
+
    // Spinner dropdown = findViewById(R.id.spinner1);
    // username
+   String[] items = new String[]{"1", "2"};
 
 
     com.example.purestock.DatabaseHelper database;
@@ -36,7 +41,8 @@ public class TransactionActivity extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_transaction );
 
-        database = new  com.example.purestock.DatabaseHelper(this);
+
+        database = new  DatabaseHelper(this);
 
         submit = findViewById( R.id.submit_transcation );
         //username = findViewById( R.id.Trans_Username );
@@ -44,14 +50,20 @@ public class TransactionActivity extends AppCompatActivity {
         price = findViewById( R.id.Trans_price );
         numbs = findViewById( R.id.Trans_num );
        // date = findViewById( R.id.Trans_date );
+        type = findViewById( R.id.Trans_type );
+
+//        Spinner spinner = (Spinner) findViewById(R.id.spinner1);
+//        ArrayAdapter<CharSequence> adpater = ArrayAdapter.createFromResource( this, R.array.Select, android.R.layout.simple_spinner_item  );
+//        adpater.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
+//        spinner.setAdapter(adpater);
+        //spinner.setOnItemSelectedListener( this );
+
         final User us = (User) getApplication();
         final String username = us.getUsername();
 
-        String[] items = new String[]{"1", "2"};
-        //There are multiple variations of this, but this is the basic variant.
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
-        //set the spinners adapter to the previously created one.
-        //dropdown.setAdapter(adapter);
+
+
+
 
         submit.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -62,6 +74,11 @@ public class TransactionActivity extends AppCompatActivity {
                 //String str_date = date.getText().toString();
                 String str_price = price.getText().toString();
                 String str_num = numbs.getText().toString();
+                String str_type  = type.getText().toString();
+
+
+
+
 
                 /*UserService userService = new UserService.(TransactionActivity.this);
                 User str_username = userService.getCurrentUser();
@@ -81,17 +98,21 @@ public class TransactionActivity extends AppCompatActivity {
           */
 
                 //public boolean insertTransaction(String username, String stockID, double price, int numberStocks, boolean type, String date)
+
+
+
+
                 double double_price = Double.parseDouble( str_price );
                 int int_num = Integer.parseInt(str_num);
                 if( TextUtils.isEmpty( str_stock_id ) || TextUtils.isEmpty( str_price )){
                     Toast.makeText( TransactionActivity.this, "All fileds are required!", Toast.LENGTH_SHORT ).show();
                 } else{
-                    Boolean insertTrans = database.insertTransaction( "001", str_stock_id, double_price, int_num, true, date);
+                    Boolean insertTrans = database.insertTransaction( "001", str_stock_id, double_price, int_num, str_type, date);
 
 
                     if (insertTrans){
                         Toast.makeText(TransactionActivity.this, "Success add transaction", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(TransactionActivity.this, TransactionActivity.class);
+                        Intent intent = new Intent(TransactionActivity.this, ProfileFragment.class);
                         startActivity(intent);
                     } else {
                         Toast.makeText(TransactionActivity.this, "Failed to insert transaction data", Toast.LENGTH_LONG).show();
@@ -101,6 +122,17 @@ public class TransactionActivity extends AppCompatActivity {
 
             }
         } );
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String text = parent.getItemAtPosition( position ).toString();
+        //Toast.makeText( parent.getContext(), text, Toast.LENGTH_SHORT ).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
 

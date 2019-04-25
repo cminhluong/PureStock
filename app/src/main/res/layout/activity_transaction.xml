@@ -33,13 +33,21 @@
         android:padding="10dp"
         />
 
-    <Spinner
-        android:id="@+id/spinner1"
+    <!--<Spinner-->
+        <!--android:id="@+id/spinner1"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:background="@android:drawable/btn_dropdown"-->
+        <!--android:spinnerMode="dropdown"/>-->
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Buy/Sale"
         android:layout_marginTop="15dp"
-        android:background="@android:drawable/btn_dropdown"
-        android:spinnerMode="dropdown"/>
+        android:id="@+id/Trans_type"
+        android:padding="10dp"
+        />
 
     <EditText
         android:layout_width="match_parent"

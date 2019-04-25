@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- first icon is created automatically that is white 3 dots-->
+    <!-- This is the menu for sorting by date options -->
+    <item android:id = "@+id/item1"
+        android:title="Sort by Date"
+        app:showAsAction = "never">
+
+        <!-- Below "menu" is creating a submenu in sorting by date -->
+        <menu>
+
+            <!-- This is the subitem1 for sorting by date -->
+            <item android:id="@+id/subitem1"
+                android:title = "Accending"
+                app:showAsAction = "never" />
+
+            <!-- This is the subitem for sorting by  date -->
+            <item android:id="@+id/subitem2"
+                android:title = "Decending"
+                app:showAsAction = "never" />
+
+        </menu>
+    </item>
+
+
+    <!-- This is the menu for sorting by price options -->
+    <item android:id = "@+id/item2"
+        android:title="Sort by Price"
+        app:showAsAction = "never">
+
+        <!-- Below "menu" is creating a submenu in sorting by price -->
+        <menu>
+
+            <!-- This is the subitem1 for sorting by price -->
+            <item android:id="@+id/subitem3"
+                android:icon = "@drawable/ic_trending_up_black_24dp"
+                android:title = "Increasing"
+                app:showAsAction = "never" />
+
+            <!-- This is the subitem for sorting by  date -->
+            <item android:id="@+id/subitem4"
+                android:icon = "@drawable/ic_trending_down_black_24dp"
+                android:title = "Decending"
+                app:showAsAction = "never" />
+
+        </menu>
+    </item>
+</menu>
