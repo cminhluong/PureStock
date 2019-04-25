@@ -383,14 +383,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return dataset;
     }
-
-
-    public void onUpgradeCol(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // If you need to add a column
-        if (newVersion > oldVersion) {
-            db.execSQL("ALTER TABLE TRANSACTIONS ADD COLUMN NUMBER_STOCK INT ");
-        }
-    }
+    
 
 
 }
