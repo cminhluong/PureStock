@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.purestock.Model.User;
+
 //import com.google.android.gms.tasks.OnCompleteListener;
 //import com.google.android.gms.tasks.Task;
 //import com.google.firebase.auth.AuthResult;
@@ -29,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     com.example.purestock.DatabaseHelper database;
     //FirebaseAuth auth;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         login = findViewById(R.id.login);
         password = findViewById(R.id.password);
         txt_signup = findViewById(R.id.txt_signup);
-
+        final User us = (User) getApplication();
         database = new  com.example.purestock.DatabaseHelper(this);
        // auth = FirebaseAuth.getInstance();
 
@@ -98,6 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         Toast.makeText(LoginActivity.this, "login success", Toast.LENGTH_LONG).show();
+                        us.setUsername(str_username);
                     }else{
                         Toast.makeText(LoginActivity.this, "Fail to login", Toast.LENGTH_LONG).show();
                     }
@@ -108,4 +112,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 }

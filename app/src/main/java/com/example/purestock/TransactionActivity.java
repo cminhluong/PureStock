@@ -25,8 +25,10 @@ import java.util.Locale;
 public class TransactionActivity extends AppCompatActivity {
 
     Button submit;
-    EditText username, stock_id, price, numbs;
+    EditText stock_id, price, numbs;
    // Spinner dropdown = findViewById(R.id.spinner1);
+   // username
+
 
     com.example.purestock.DatabaseHelper database;
     @Override
@@ -35,13 +37,15 @@ public class TransactionActivity extends AppCompatActivity {
         setContentView( R.layout.activity_transaction );
 
         database = new  com.example.purestock.DatabaseHelper(this);
+
         submit = findViewById( R.id.submit_transcation );
-        username = findViewById( R.id.Trans_Username );
+        //username = findViewById( R.id.Trans_Username );
         stock_id = findViewById( R.id.Trans_stockID );
         price = findViewById( R.id.Trans_price );
         numbs = findViewById( R.id.Trans_num );
        // date = findViewById( R.id.Trans_date );
-
+        final User us = (User) getApplication();
+        final String username = us.getUsername();
 
         String[] items = new String[]{"1", "2"};
         //There are multiple variations of this, but this is the basic variant.
@@ -52,7 +56,7 @@ public class TransactionActivity extends AppCompatActivity {
         submit.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String str_username = username.getText().toString();
+                //String str_username = username.getText().toString();
                 String str_stock_id = stock_id.getText().toString();
                 String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
                 //String str_date = date.getText().toString();
@@ -76,14 +80,13 @@ public class TransactionActivity extends AppCompatActivity {
 
           */
 
-        //(String username, String stockID, double price, int numberStocks, boolean type, String date)
+                //public boolean insertTransaction(String username, String stockID, double price, int numberStocks, boolean type, String date)
                 double double_price = Double.parseDouble( str_price );
                 int int_num = Integer.parseInt(str_num);
-                if(TextUtils.isEmpty( str_username ) || TextUtils.isEmpty( str_stock_id )
-                || TextUtils.isEmpty( str_price )){
+                if( TextUtils.isEmpty( str_stock_id ) || TextUtils.isEmpty( str_price )){
                     Toast.makeText( TransactionActivity.this, "All fileds are required!", Toast.LENGTH_SHORT ).show();
                 } else{
-                    Boolean insertTrans = database.insertTransaction( str_username, str_stock_id, double_price, int_num, true, date);
+                    Boolean insertTrans = database.insertTransaction( "001", str_stock_id, double_price, int_num, true, date);
 
 
                     if (insertTrans){

@@ -19,7 +19,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TRANSACTIONS_COL_2 = "UID";
     private static final String TRANSACTIONS_COL_3 = "SID";
     private static final String TRANSACTIONS_COL_4 = "PRICE";
-    private static final String TRANSACTIONS_COL_5 = "NUMBER_STOCK";            // Add stock number column (04/17/2019)
+    // Add stock number column (04/17/2019)
+    private static final String TRANSACTIONS_COL_5 = "NUMBER_STOCK";
+
     private static final String TRANSACTIONS_COL_6 = "TYPE";
     private static final String TRANSACTIONS_COL_7 = "DATE";
     public static final String WATCHLISTS_TABLE = "WATCHLISTS";
@@ -378,6 +380,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor dataset = db.rawQuery(queryStr, null);
 
+
         return dataset;
     }
+
+
+    public void onUpgradeCol(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // If you need to add a column
+        if (newVersion > oldVersion) {
+            db.execSQL("ALTER TABLE TRANSACTIONS ADD COLUMN NUMBER_STOCK INT ");
+        }
+    }
+
+
 }
