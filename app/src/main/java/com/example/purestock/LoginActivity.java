@@ -28,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText username, password;
     Button login;
     TextView txt_signup;
+    int uid;
     com.example.purestock.DatabaseHelper database;
     //FirebaseAuth auth;
 
@@ -95,12 +96,15 @@ public class LoginActivity extends AppCompatActivity {
 //                                }
 
 //                            });
+
+                    
                     UserService uService = new UserService(LoginActivity.this);
-                    boolean flag = uService.login(str_username, str_password);
+                    boolean flag = uService.login(uid, str_username, str_password);
                     if(flag){
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         Toast.makeText(LoginActivity.this, "login success", Toast.LENGTH_LONG).show();
+
                         us.setUsername(str_username);
                     }else{
                         Toast.makeText(LoginActivity.this, "Fail to login", Toast.LENGTH_LONG).show();

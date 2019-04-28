@@ -64,7 +64,7 @@ public class Watch_ListFragment extends Fragment {
     //ArrayList<HashMap<String, String>> resultList;
     ArrayList<HashMap<String, SpannableString>> resultList;
     ArrayList<HashMap<String, SpannableString>> resultEndpointList ;
-    private String username;
+    private int username;
     DatabaseHelper dbHelper;
     CommonUtilities cUtil;
     List<String> stockIDs;
@@ -74,7 +74,7 @@ public class Watch_ListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        username = "test";
+        username = 1 ;
     }
 
     private String GetStockNameByID(String stockID)
@@ -268,7 +268,7 @@ public class Watch_ListFragment extends Fragment {
         resultEndpointList = new ArrayList<HashMap<String,SpannableString>>();
         searchResult.setVisibility(View.GONE);
 
-        username = "1";
+        username = 1;
 
         int tmpIDs[] = new int[4];
 

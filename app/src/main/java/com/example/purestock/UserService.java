@@ -13,13 +13,13 @@ public class UserService {
         dbHelper = new DatabaseHelper(context);
 
     }
-    public boolean login(String username,String password){
+    public boolean login(int uid, String username,String password){
 
         SQLiteDatabase sdb= dbHelper.getReadableDatabase();
 
-        String sql="select * from user where username=? and password=?";
+        String sql="select * from user where uid=? and username=? and password=?";
 
-        Cursor cursor=sdb.rawQuery(sql, new String[]{username,password});
+        Cursor cursor=sdb.rawQuery(sql, new String[]{String.valueOf( uid ), username,password});
 
         if(cursor.moveToFirst()==true){
 

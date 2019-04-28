@@ -47,14 +47,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_STOCKS = "CREATE TABLE IF NOT EXISTS " + STOCKS_TABLE + " (" + STOCKS_COL_1 + " CHAR(10) NOT NULL PRIMARY KEY, " +
             STOCKS_COL_2 + " VARCHAR(100) NOT NULL)";
     private static final String CREATE_TABLE_TRANSACTIONS = "CREATE TABLE IF NOT EXISTS " + TRANSACTIONS_TABLE + " (" + TRANSACTIONS_COL_1 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            TRANSACTIONS_COL_2 + " CHAR(20) NOT NULL, " + TRANSACTIONS_COL_3 + " CHAR(10) NOT NULL, " +
+            TRANSACTIONS_COL_2 + " INTEGER NOT NULL, " + TRANSACTIONS_COL_3 + " CHAR(10) NOT NULL, " +
             TRANSACTIONS_COL_4 + " DOUBLE NOT NULL, " + TRANSACTIONS_COL_5 + " INT NOT NULL, " +
             TRANSACTIONS_COL_6 + " CHAR(20) NOT NULL, " + TRANSACTIONS_COL_7 + " DATETIME NOT NULL, " +
-            "FOREIGN KEY (" + TRANSACTIONS_COL_2 + ") REFERENCES " + USERS_TABLE + " (" + USERS_COL_1 + "), " +
+            //Jian Ma 04-28-2019 change references users_table from users col_4 to col_1
+            "FOREIGN KEY (" + TRANSACTIONS_COL_2 + ") REFERENCES " + USERS_TABLE + " (" + USERS_COL_4 + "), " +
             "FOREIGN KEY (" + TRANSACTIONS_COL_3 + ") REFERENCES " + STOCKS_TABLE + " (" + STOCKS_COL_1 + "))";
     //"PRIMARY KEY (" + TRANSACTIONS_COL_1 + ", " + TRANSACTIONS_COL_2 + "))";
     private static final String CREATE_TABLE_WATCHLISTS = "CREATE TABLE IF NOT EXISTS " + WATCHLISTS_TABLE + " (" + WATCHLISTS_COL_1 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             WATCHLISTS_COL_2 + " NVARCHAR(200) NOT NULL, " + WATCHLISTS_COL_3 + " DATETIME NOT NULL, " +
+            //Jian Ma 04-28-2019 change the watchlists_col_4 datatype to integer
             WATCHLISTS_COL_4 + " INTEGER NOT NULL, " +
             "FOREIGN KEY (" + WATCHLISTS_COL_4 + ") REFERENCES " + USERS_TABLE + " (" + USERS_COL_4 + "))";
     //"FOREIGN KEY (" + WATCHLISTS_COL_2 + ") REFERENCES " + STOCKS_TABLE + " (" + STOCKS_COL_1 + "), " +
@@ -132,12 +134,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else
             return true;
     }
-
-    public boolean insertTransaction(String username, String stockID, double price, int numberStocks, String type, String date)
+    //Jian Ma 4-28-2019 change username to UID
+    public boolean insertTransaction(int UID, String stockID, double price, int numberStocks, String type, String date)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(TRANSACTIONS_COL_2, username);
+        contentValues.put(TRANSACTIONS_COL_2, UID);
         contentValues.put(TRANSACTIONS_COL_3, stockID);
         contentValues.put(TRANSACTIONS_COL_4, price);
         contentValues.put(TRANSACTIONS_COL_5, numberStocks);
@@ -150,14 +152,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else
             return true;
     }
-
-    public boolean insertWatchlist(String username, String name, String date)
+    //Jian Ma 4-28-2019 change username to UID
+    public boolean insertWatchlist(int UID, String name, String date)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(WATCHLISTS_COL_2, name);
         contentValues.put(WATCHLISTS_COL_3, date);
-        contentValues.put(WATCHLISTS_COL_4, username);
+        contentValues.put(WATCHLISTS_COL_4, UID);
         long result = db.insert(WATCHLISTS_TABLE, null, contentValues);
 
         if(result == -1)

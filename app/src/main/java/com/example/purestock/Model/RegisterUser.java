@@ -1,26 +1,23 @@
 package com.example.purestock.Model;
 
-
 import android.app.Application;
 
-public class User extends Application {
+public class RegisterUser extends Application {
+
 
     private String username;
     private String password;
-    private int uid;
+
     /*private String fullname;
     private String email;*/
-
-    //, String fullname, String email
-    public User(int uid, String username, String password){
+    public RegisterUser(String username, String password, String fullname, String email){
         this.username = username;
         this.password = password;
-        this.uid = uid;
         /*this.fullname = fullname;
         this.email = email;*/
     }
 
-    public User(){
+    public RegisterUser(){
 
     }
 
@@ -36,9 +33,6 @@ public class User extends Application {
     public void setPassword(String password){
         this.password = password;
     }
-    public int getUid(){return uid;}
-    public void setUid() {this.uid = uid;}
-
    /* public String getFullname(){
         return fullname;
     }
@@ -52,3 +46,5 @@ public class User extends Application {
         this.email = email;
     }*/
 }
+
+

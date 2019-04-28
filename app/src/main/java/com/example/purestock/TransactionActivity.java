@@ -16,6 +16,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.purestock.Fragement.HomeFragment;
+import com.example.purestock.Fragement.PostActivity;
 import com.example.purestock.Fragement.ProfileFragment;
 import com.example.purestock.Model.User;
 
@@ -107,12 +109,12 @@ public class TransactionActivity extends AppCompatActivity implements  AdapterVi
                 if( TextUtils.isEmpty( str_stock_id ) || TextUtils.isEmpty( str_price )){
                     Toast.makeText( TransactionActivity.this, "All fileds are required!", Toast.LENGTH_SHORT ).show();
                 } else{
-                    Boolean insertTrans = database.insertTransaction( "001", str_stock_id, double_price, int_num, str_type, date);
+                    Boolean insertTrans = database.insertTransaction( 1, str_stock_id, double_price, int_num, str_type, date);
 
 
                     if (insertTrans){
                         Toast.makeText(TransactionActivity.this, "Success add transaction", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(TransactionActivity.this, ProfileFragment.class);
+                        Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
                         startActivity(intent);
                     } else {
                         Toast.makeText(TransactionActivity.this, "Failed to insert transaction data", Toast.LENGTH_LONG).show();
