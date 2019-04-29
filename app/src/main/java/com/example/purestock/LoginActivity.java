@@ -2,6 +2,8 @@ package com.example.purestock;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.purestock.Model.User;
-
 //import com.google.android.gms.tasks.OnCompleteListener;
 //import com.google.android.gms.tasks.Task;
 //import com.google.firebase.auth.AuthResult;
@@ -28,9 +29,11 @@ public class LoginActivity extends AppCompatActivity {
     EditText username, password;
     Button login;
     TextView txt_signup;
-    int uid;
+    static int uid;
+    public static int uids;
     com.example.purestock.DatabaseHelper database;
     //FirebaseAuth auth;
+
 
 
     @Override
@@ -42,10 +45,10 @@ public class LoginActivity extends AppCompatActivity {
         login = findViewById(R.id.login);
         password = findViewById(R.id.password);
         txt_signup = findViewById(R.id.txt_signup);
-        final User us = (User) getApplication();
-        database = new  com.example.purestock.DatabaseHelper(this);
-       // auth = FirebaseAuth.getInstance();
+        //final User us = (User) getApplication();
 
+       // auth = FirebaseAuth.getInstance();
+        database = new  com.example.purestock.DatabaseHelper(this);
         txt_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,15 +100,57 @@ public class LoginActivity extends AppCompatActivity {
 
 //                            });
 
-                    
+
+                    SQLiteDatabase sdb= database.getReadableDatabase();
                     UserService uService = new UserService(LoginActivity.this);
-                    boolean flag = uService.login(uid, str_username, str_password);
+                    boolean flag = uService.login(str_username, str_password);
                     if(flag){
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
-                        Toast.makeText(LoginActivity.this, "login success", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(LoginActivity.this, "login success", Toast.LENGTH_LONG).show();
 
-                        us.setUsername(str_username);
+                       // String sql="select uid from user where username=" + str_username;
+                        //String args[] = {"uid" + "=?"};
+
+                       // rawQuery("SELECT id, name FROM people WHERE name = ? AND id = ?", new String[] {"David", "2"}
+                        Cursor cursor=sdb.rawQuery("select uid from user where username= ?", new String[]{str_username});
+
+                        while (cursor.moveToNext()) {
+                            uids = cursor.getInt( cursor.getColumnIndex( "UID" ) );
+                            //String useid = Integer.toString( uids );
+                            User us = new User(uids);
+                               us.setUsername( str_username );
+                               us.setUid( uids );
+                            //Intent inte = new Intent(LoginActivity.this,TransactionActivity.class);
+
+                            //inte.putExtra("UID", uids);
+
+
+
+                            Toast.makeText(LoginActivity.this, "useid" + uids, Toast.LENGTH_LONG).show();
+                           // startActivity(inte);
+                            //Toast.makeText(LoginActivity.this, "uid" + us.getUid(), Toast.LENGTH_LONG).show();
+                        }
+//                        if(cursor !=  null && cursor.moveToFirst()){
+//                            do {
+//                                uid = cursor.getInt(cursor.getColumnIndex("UID"));
+//                                User us = new User(uid,str_username,str_password  );
+//                                us.setUsername( str_username );
+//                                us.setUid( uid );
+//                            }while(cursor.moveToNext());
+//                        }
+//                        while(cursor.moveToNext()){
+//
+//
+//
+//                             Toast.makeText(LoginActivity.this, "uid" + uid, Toast.LENGTH_LONG).show();
+//
+//
+//                        }
+
+//                        us.setUsername(str_username);
+//                        us.setUid(uid);
+                        cursor.close();
                     }else{
                         Toast.makeText(LoginActivity.this, "Fail to login", Toast.LENGTH_LONG).show();
                     }

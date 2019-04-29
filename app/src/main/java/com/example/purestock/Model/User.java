@@ -7,7 +7,7 @@ public class User extends Application {
 
     private String username;
     private String password;
-    private int uid;
+    public static int uid;
     /*private String fullname;
     private String email;*/
 
@@ -23,6 +23,9 @@ public class User extends Application {
     public User(){
 
     }
+    public User(int uid){
+        this.uid = uid;
+    }
 
     public String getUsername(){
         return username;
@@ -36,8 +39,8 @@ public class User extends Application {
     public void setPassword(String password){
         this.password = password;
     }
-    public int getUid(){return uid;}
-    public void setUid() {this.uid = uid;}
+    public static int getUid(){return uid;}
+    public void setUid(int uid) {this.uid = uid;}
 
    /* public String getFullname(){
         return fullname;

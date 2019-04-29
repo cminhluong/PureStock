@@ -1,36 +1,27 @@
 package com.example.purestock;
-
-import android.app.ActivityManager;
+import com.example.purestock.Model.User;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.purestock.Fragement.HomeFragment;
-import com.example.purestock.Fragement.PostActivity;
-import com.example.purestock.Fragement.ProfileFragment;
 import com.example.purestock.Model.User;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public class TransactionActivity extends AppCompatActivity implements  AdapterView.OnItemSelectedListener{
 
     Button submit;
     EditText stock_id, price, numbs, type;
+    int uid;
+//    final User us = (User) getApplication();
 
    // Spinner dropdown = findViewById(R.id.spinner1);
    // username
@@ -40,6 +31,7 @@ public class TransactionActivity extends AppCompatActivity implements  AdapterVi
     com.example.purestock.DatabaseHelper database;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_transaction );
 
@@ -60,8 +52,8 @@ public class TransactionActivity extends AppCompatActivity implements  AdapterVi
 //        spinner.setAdapter(adpater);
         //spinner.setOnItemSelectedListener( this );
 
-        final User us = (User) getApplication();
-        final String username = us.getUsername();
+//        final User us = (User) getApplication();
+//        final String username = us.getUsername();
 
 
 
@@ -102,6 +94,14 @@ public class TransactionActivity extends AppCompatActivity implements  AdapterVi
                 //public boolean insertTransaction(String username, String stockID, double price, int numberStocks, boolean type, String date)
 
 
+                User us = new User();
+                uid = us.getUid();
+//                Intent i = getIntent();
+//                String value = i.getStringExtra( "UID" );
+               // Intent inte = getIntent();
+               // int value = inte.getIntExtra("UID", 0);
+//                String fName = intent.getStringExtra("firstName");
+                Toast.makeText(TransactionActivity.this, "uid" + uid, Toast.LENGTH_SHORT).show();
 
 
                 double double_price = Double.parseDouble( str_price );
@@ -109,16 +109,28 @@ public class TransactionActivity extends AppCompatActivity implements  AdapterVi
                 if( TextUtils.isEmpty( str_stock_id ) || TextUtils.isEmpty( str_price )){
                     Toast.makeText( TransactionActivity.this, "All fileds are required!", Toast.LENGTH_SHORT ).show();
                 } else{
-                    Boolean insertTrans = database.insertTransaction( 1, str_stock_id, double_price, int_num, str_type, date);
 
 
-                    if (insertTrans){
-                        Toast.makeText(TransactionActivity.this, "Success add transaction", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(TransactionActivity.this, "Failed to insert transaction data", Toast.LENGTH_LONG).show();
-                    }
+                   // String uids = getIntent().getStringExtra("UID");
+                   // String userid;
+
+
+                        //uid = Integer.parseInt(value);
+                        Boolean insertTrans = database.insertTransaction( uid, str_stock_id, double_price, int_num, str_type, date);
+
+
+                        if (insertTrans){
+                            //Toast.makeText(TransactionActivity.this, "Success add transaction", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(TransactionActivity.this, "uid" + uid, Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        } else {
+                            // Toast.makeText( TransactionActivity.this,"uid = " + uid , Toast.LENGTH_SHORT ).show();
+                             //Toast.makeText(TransactionActivity.this, "Failed to insert transaction data", Toast.LENGTH_LONG).show();
+                        }
+
+
+
 
                 }
 
