@@ -1,164 +1,149 @@
 package com.example.purestock;
 import com.example.purestock.Model.User;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
-
-import com.example.purestock.Model.User;
-
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class TransactionActivity extends AppCompatActivity implements  AdapterView.OnItemSelectedListener{
+public class TransactionActivity extends AppCompatActivity{
 
     Button submit;
     EditText stock_id, price, numbs, type;
+    Spinner tranType;
     int uid;
-//    final User us = (User) getApplication();
+    DatabaseHelper database;
+    AlphaVantageHelper avHelper;
+    String transStr;
 
-   // Spinner dropdown = findViewById(R.id.spinner1);
-   // username
-   String[] items = new String[]{"1", "2"};
+    public class ALphaVantageStockSymbolQuery extends AsyncTask<String, Void, String[]> {
 
+        @Override
+        protected String[] doInBackground(String... params)
+        {
+            String bestMatched[] = null;
+            JSONObject json;
 
-    com.example.purestock.DatabaseHelper database;
+            try {
+                json = new JSONObject(avHelper.submitRequest());
+
+                JSONArray matchedArray = json.optJSONArray("bestMatches");
+                if(matchedArray != null) {
+
+                    for (int i = 0; i < matchedArray.length(); i++) {
+                        JSONObject stockEntry = matchedArray.getJSONObject(i);
+                        if(params[0].equals(stockEntry.getString("1. symbol"))) {
+                            bestMatched = new String[2];
+                            bestMatched[0] = stockEntry.getString("1. symbol");
+                            bestMatched[1] = stockEntry.getString("2. name");
+                        }
+                    }
+                }
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+            return bestMatched;
+        }
+
+        @Override
+        protected void onPostExecute(String[] searchResults) {
+            if (searchResults != null)
+            {
+                database.insertStock(searchResults[0], searchResults[1]);
+                double double_price = Double.parseDouble(price.getText().toString());
+                int numShares = Integer.parseInt(numbs.getText().toString());
+                String date = new SimpleDateFormat("YYYY-MM-DD HH:MM:SS", Locale.getDefault()).format(new Date());
+                String tmpType = "";
+
+                if(transStr.equals("Buy"))
+                    tmpType = "0";
+                else if(transStr.equals("Sell"))
+                    tmpType = "1";
+
+                database.insertStock(searchResults[0], searchResults[1]);
+                Boolean insertTrans = database.insertTransaction( uid, searchResults[0], double_price, numShares, tmpType, date);
+
+                if (insertTrans){
+                    Toast.makeText(TransactionActivity.this, "New transaction inserted!", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    // Toast.makeText( TransactionActivity.this,"uid = " + uid , Toast.LENGTH_SHORT ).show();
+                    //Toast.makeText(TransactionActivity.this, "Failed to insert transaction data", Toast.LENGTH_LONG).show();
+                }
+            }
+            else
+            {
+                Toast.makeText(TransactionActivity.this, "Stock symbol incorrect!", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_transaction );
 
-
+        avHelper = new AlphaVantageHelper("27KRMC96L132GI57", 2,1000);
         database = new  DatabaseHelper(this);
 
         submit = findViewById( R.id.submit_transcation );
-        //username = findViewById( R.id.Trans_Username );
         stock_id = findViewById( R.id.Trans_stockID );
         price = findViewById( R.id.Trans_price );
         numbs = findViewById( R.id.Trans_num );
-       // date = findViewById( R.id.Trans_date );
-        type = findViewById( R.id.Trans_type );
+        tranType = findViewById( R.id.transaction_type);
 
-//        Spinner spinner = (Spinner) findViewById(R.id.spinner1);
-//        ArrayAdapter<CharSequence> adpater = ArrayAdapter.createFromResource( this, R.array.Select, android.R.layout.simple_spinner_item  );
-//        adpater.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
-//        spinner.setAdapter(adpater);
-        //spinner.setOnItemSelectedListener( this );
+        String[] items = new String[]{"Buy", "Sell"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
 
-//        final User us = (User) getApplication();
-//        final String username = us.getUsername();
+        tranType.setAdapter(adapter);
 
+        tranType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                transStr = (String)parent.getItemAtPosition(position);
+            }
 
-
-
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         submit.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //String str_username = username.getText().toString();
-                String str_stock_id = stock_id.getText().toString();
-                String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-                //String str_date = date.getText().toString();
-                String str_price = price.getText().toString();
-                String str_num = numbs.getText().toString();
-                String str_type  = type.getText().toString();
-
-
-
-
-
-                /*UserService userService = new UserService.(TransactionActivity.this);
-                User str_username = userService.getCurrentUser();
-                */
-        /*
-          UserService uService = new UserService(LoginActivity.this);
-                    boolean flag = uService.login(str_username, str_password);
-                    if(flag){
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        Toast.makeText(LoginActivity.this, "login success", Toast.LENGTH_LONG).show();
-                    }else{
-                        Toast.makeText(LoginActivity.this, "Fail to login", Toast.LENGTH_LONG).show();
-                    }
-                }
-
-          */
-
-                //public boolean insertTransaction(String username, String stockID, double price, int numberStocks, boolean type, String date)
-
-
+                String str_stock_id = stock_id.getText().toString().toUpperCase();
                 User us = new User();
                 uid = us.getUid();
-//                Intent i = getIntent();
-//                String value = i.getStringExtra( "UID" );
-               // Intent inte = getIntent();
-               // int value = inte.getIntExtra("UID", 0);
-//                String fName = intent.getStringExtra("firstName");
-                Toast.makeText(TransactionActivity.this, "uid" + uid, Toast.LENGTH_SHORT).show();
+//
+                //Toast.makeText(TransactionActivity.this, "uid" + uid, Toast.LENGTH_SHORT).show();
 
-
-                double double_price = Double.parseDouble( str_price );
-                int int_num = Integer.parseInt(str_num);
-                if( TextUtils.isEmpty( str_stock_id ) || TextUtils.isEmpty( str_price )){
+                if( TextUtils.isEmpty( str_stock_id ) || TextUtils.isEmpty(price.getText().toString())){
                     Toast.makeText( TransactionActivity.this, "All fileds are required!", Toast.LENGTH_SHORT ).show();
                 } else{
 
-
-                   // String uids = getIntent().getStringExtra("UID");
-                   // String userid;
-
-
-                        //uid = Integer.parseInt(value);
-                        Boolean insertTrans = database.insertTransaction( uid, str_stock_id, double_price, int_num, str_type, date);
-
-
-                        if (insertTrans){
-                            //Toast.makeText(TransactionActivity.this, "Success add transaction", Toast.LENGTH_SHORT).show();
-                            //Toast.makeText(TransactionActivity.this, "uid" + uid, Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
-                            startActivity(intent);
-                        } else {
-                            // Toast.makeText( TransactionActivity.this,"uid = " + uid , Toast.LENGTH_SHORT ).show();
-                             //Toast.makeText(TransactionActivity.this, "Failed to insert transaction data", Toast.LENGTH_LONG).show();
-                        }
-
-
-
-
+                    avHelper.setParameter(1,"keywords=" + str_stock_id);
+                    avHelper.setParameter(0,"function=SYMBOL_SEARCH");
+                    new ALphaVantageStockSymbolQuery().execute(str_stock_id);
                 }
-
             }
         } );
     }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String text = parent.getItemAtPosition( position ).toString();
-        //Toast.makeText( parent.getContext(), text, Toast.LENGTH_SHORT ).show();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 }
-
-/*DBHelper dbhelper = new DBHelper(this);
-SQLiteDatabase db = dbhelper.getWritableDatabase();
-Cursor cursor = db.query(Table,
-    username,
-    isCurrentUser + " = ? ",
-    new String []{"true"},
-    null, null, null);
-cursor.moveToFirst();
-String currentUsername = cursor.getString(cursor.getColumnIndex("username"));*/
-
-//Boolean insertUser = database.insertUser(str_username, str_password, str_fullname , str_email);
-// public boolean insertTransaction(String username, String stockID, double price, boolean type, String date)

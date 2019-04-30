@@ -25,7 +25,6 @@ import com.example.purestock.Model.User;
 //import com.google.firebase.database.FirebaseDatabase;
 //import com.google.firebase.database.ValueEventListener;
 public class LoginActivity extends AppCompatActivity {
-
     EditText username, password;
     Button login;
     TextView txt_signup;

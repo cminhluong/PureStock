@@ -312,20 +312,21 @@ public class Watch_ListFragment extends Fragment {
                 {
                     case 0:
                     {
-
+                        String tmp1;
+                        int index1;
                         //HashMap<String, String> tmp = (HashMap<String, String>) listviewDisplayAdapter.getItem(position);
                         HashMap<String, SpannableString> tmp = (HashMap<String, SpannableString>) listviewDisplayAdapter.getItem(position);
-
-                        if(dbHelper.deleteWatchlist_Stock(1, tmp.get("0").toString())) {
+                        tmp1 = tmp.get("0").toString();
+                        index1 = tmp1.indexOf("\n");
+                        if(dbHelper.deleteWatchlist_Stock(1,tmp1.substring(0, index1))) {
                             listviewDisplayAdapter.remove(position);
                             listviewDisplayAdapter.notifyDataSetChanged();
-
 
                             listviewDisplayAdapter.setIdentifyCoumn(2);
                             displayWatchlist.setAdapter(listviewDisplayAdapter);
                             displayWatchlist.invalidateViews();
 
-                            Toast.makeText(view.getContext(), "Failed to add new watch list stock", Toast.LENGTH_LONG).show();
+                            Toast.makeText(view.getContext(), "Item deleted", Toast.LENGTH_LONG).show();
                         }
                         break;
                     }

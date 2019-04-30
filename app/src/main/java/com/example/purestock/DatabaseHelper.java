@@ -49,7 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_TRANSACTIONS = "CREATE TABLE IF NOT EXISTS " + TRANSACTIONS_TABLE + " (" + TRANSACTIONS_COL_1 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             TRANSACTIONS_COL_2 + " INTEGER NOT NULL, " + TRANSACTIONS_COL_3 + " CHAR(10) NOT NULL, " +
             TRANSACTIONS_COL_4 + " DOUBLE NOT NULL, " + TRANSACTIONS_COL_5 + " INT NOT NULL, " +
-            TRANSACTIONS_COL_6 + " CHAR(20) NOT NULL, " + TRANSACTIONS_COL_7 + " DATETIME NOT NULL, " +
+            TRANSACTIONS_COL_6 + " BOOLEAN NOT NULL, " + TRANSACTIONS_COL_7 + " DATETIME NOT NULL, " +
             //Jian Ma 04-28-2019 change references users_table from users col_4 to col_1
             "FOREIGN KEY (" + TRANSACTIONS_COL_2 + ") REFERENCES " + USERS_TABLE + " (" + USERS_COL_4 + "), " +
             "FOREIGN KEY (" + TRANSACTIONS_COL_3 + ") REFERENCES " + STOCKS_TABLE + " (" + STOCKS_COL_1 + "))";
