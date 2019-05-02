@@ -100,7 +100,7 @@ public class GainLoss extends AppCompatActivity{
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 startPeriodTV.setText(month+1+"/"+dayOfMonth+"/"+year);
-                startDate = year + "-" + Integer.toString(month+1) + "-" + dayOfMonth + " 13:55:00";
+                startDate = year + "-" + Integer.toString(month+1) + "-" + dayOfMonth + " 00:00:00";
             }
         };
 
@@ -125,7 +125,7 @@ public class GainLoss extends AppCompatActivity{
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 endPeriodTV.setText(month+1+"/"+dayOfMonth+"/"+year);
-                endDate = year + "-" + Integer.toString(month+1) + "-" + dayOfMonth + " 19:00:00";
+                endDate = year + "-" + Integer.toString(month+1) + "-" + dayOfMonth + " 00:00:00";
                 LoadTransactions(Integer.toString(currUID), startDate, endDate);
 
                 avHelper.setParameter(0, "function=GLOBAL_QUOTE");
