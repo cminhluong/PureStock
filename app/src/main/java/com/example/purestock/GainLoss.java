@@ -176,6 +176,9 @@ public class GainLoss extends AppCompatActivity{
             double oldPrice, newPrice;
             int index = 0;
 
+            if(!resultEndpointList.isEmpty())
+                resultEndpointList.clear();
+
             try {
                 for(String value : searchResults) {
 
@@ -319,7 +322,7 @@ public class GainLoss extends AppCompatActivity{
                                         avgPrice = ((Double.parseDouble(values[2]) + Double.parseDouble(transactionCursor.getString(transactionCursor.getColumnIndex("PRICE")))) / 2);
                                         values[2] = Double.toString(avgPrice);
                                     } else {
-                                        shares = -Integer.parseInt(values[3]) + Integer.parseInt(transactionCursor.getString(transactionCursor.getColumnIndex("NUMBER_STOCK")));
+                                        shares = Integer.parseInt(values[3]) + Integer.parseInt(transactionCursor.getString(transactionCursor.getColumnIndex("NUMBER_STOCK")));
                                         if (shares > 0) {
                                             values[2] = transactionCursor.getString(transactionCursor.getColumnIndex("PRICE"));
                                             values[4] = "0";
