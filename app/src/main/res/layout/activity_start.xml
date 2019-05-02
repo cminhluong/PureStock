@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,7 +7,9 @@
     android:orientation="vertical"
     android:layout_gravity="center"
     android:padding="8dp"
-    tools:context=".StartActivity">
+    tools:context=".StartActivity"
+    android:background="@drawable/main_screen"
+    >
 
     <ImageView
         android:layout_width="wrap_content"
@@ -15,21 +17,22 @@
        />
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="Log in"
+        android:layout_marginLeft="90dp"
+        android:layout_marginTop="310dp"
+        android:text=""
         android:id="@+id/login"
         android:textColor="@color/colorPrimary"
-        android:background="@drawable/button_background"/>
+        android:background="@android:color/transparent"/>
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="Register"
+        android:layout_marginTop="408dp"
+        android:text=""
         android:id="@+id/register"
         android:textColor="@color/colorPrimary"
-        android:background="@drawable/button_background"/>
+        android:background="@android:color/transparent"/>
 
 
-</LinearLayout>
+</RelativeLayout>

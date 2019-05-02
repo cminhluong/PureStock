@@ -29,6 +29,7 @@ import com.example.purestock.DatabaseHelper;
 import com.example.purestock.ListViewAdapter;
 import com.example.purestock.MainActivity;
 import com.example.purestock.CommonUtilities;
+import com.example.purestock.Model.User;
 import com.example.purestock.R;
 
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
@@ -64,7 +65,7 @@ public class Watch_ListFragment extends Fragment {
     //ArrayList<HashMap<String, String>> resultList;
     ArrayList<HashMap<String, SpannableString>> resultList;
     ArrayList<HashMap<String, SpannableString>> resultEndpointList ;
-    private int username;
+    int currUID;
     DatabaseHelper dbHelper;
     CommonUtilities cUtil;
     List<String> stockIDs;
@@ -74,7 +75,6 @@ public class Watch_ListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        username = 1 ;
     }
 
     private String GetStockNameByID(String stockID)
@@ -116,6 +116,21 @@ public class Watch_ListFragment extends Fragment {
                 } while (watchlistCursor.moveToNext());
             }
         }
+    }
+
+    private boolean isWatchlistNameExited(String watchlistName, String UID)
+    {
+        boolean result = true;
+
+        Cursor stockCursor = dbHelper.getData("select ID from " + DatabaseHelper.WATCHLISTS_TABLE + " WHERE NAME=\"" +
+                watchlistName + "\"" + " AND UID=\"" + UID + "\"");
+
+        if (stockCursor != null) {
+            if(stockCursor.getCount() > 0)
+                result = false;
+        }
+
+        return result;
     }
 
     private void GetWatchlistInfo() {
@@ -268,7 +283,8 @@ public class Watch_ListFragment extends Fragment {
         resultEndpointList = new ArrayList<HashMap<String,SpannableString>>();
         searchResult.setVisibility(View.GONE);
 
-        username = 1;
+        User us = new User();
+        currUID = us.getUid();
 
         int tmpIDs[] = new int[4];
 
@@ -365,15 +381,14 @@ public class Watch_ListFragment extends Fragment {
                         HashMap<String, SpannableString>  tmp = (HashMap<String, SpannableString> )listviewSearchAdapter.getItem(position);
                         //HashMap<String, String>  tmp = (HashMap<String, String> )listviewSearchAdapter.getItem(position);
 
-                        if(dbHelper.insertStock(tmp.get("0").toString(), tmp.get("1").toString()))
-                            Toast.makeText(view.getContext(), "Added to Stock", Toast.LENGTH_LONG).show();
-                        else
-                            Toast.makeText(view.getContext(), "Existed in Stock", Toast.LENGTH_LONG).show();
+                        dbHelper.insertStock(tmp.get("0").toString(), tmp.get("1").toString());
 
-                        if(dbHelper.insertWatchlist(username, "TestWatchlist", cUtil.getCurrentDatetime()))
-                            Toast.makeText(view.getContext(), "Create new watch list", Toast.LENGTH_LONG).show();
-                        else
-                            Toast.makeText(view.getContext(), "Failed to create new watch list", Toast.LENGTH_LONG).show();
+                        if(isWatchlistNameExited("Watchlist", Integer.toString(currUID))) {
+                            if (dbHelper.insertWatchlist(currUID, "Watchlist", cUtil.getCurrentDatetime()))
+                                Toast.makeText(view.getContext(), "Create new watch list", Toast.LENGTH_LONG).show();
+                            else
+                                Toast.makeText(view.getContext(), "Failed to create new watch list", Toast.LENGTH_LONG).show();
+                        }
 
                         if(dbHelper.insertWatchlist_stock(1, tmp.get("0").toString(),cUtil.getCurrentDatetime())) {
 

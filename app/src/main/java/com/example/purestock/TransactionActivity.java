@@ -15,6 +15,8 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -67,8 +69,11 @@ public class TransactionActivity extends AppCompatActivity{
                 database.insertStock(searchResults[0], searchResults[1]);
                 double double_price = Double.parseDouble(price.getText().toString());
                 int numShares = Integer.parseInt(numbs.getText().toString());
-                String date = new SimpleDateFormat("YYYY-MM-DD HH:MM:SS", Locale.getDefault()).format(new Date());
                 String tmpType = "";
+
+                Date today = new Date();
+                DateFormat targetFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                String date = targetFormat.format(today);
 
                 if(transStr.equals("Buy"))
                     tmpType = "0";

@@ -21,7 +21,7 @@
         <activity android:name=".addstock" />
         <activity android:name=".TransactionActivity" />
         <activity android:name=".Fragement.PostActivity" />
-        <!--<activity android:name=".Fragement.ProfileFragment" />-->
+        <activity android:name=".GainLoss" />-->
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".StartActivity">

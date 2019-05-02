@@ -15,10 +15,6 @@ public class ListViewAdapter extends BaseAdapter {
     public ArrayList<HashMap<String, SpannableString>> list;
     //public ArrayList<HashMap<String, String>> list;
 
-    //public static final String FIRST_COLUMN="First";
-    //public static final String SECOND_COLUMN="Second";
-    //public static final String THIRD_COLUMN="Third";
-    //public static final String FOURTH_COLUMN="Fourth";
     Activity activity;
     int layoutID;
     int numberLayouts;
@@ -95,10 +91,6 @@ public class ListViewAdapter extends BaseAdapter {
             {
                 holder.txtLayout[i] = (TextView) convertView.findViewById(itemIDs[i]);
             }
-            //holder.txtFirst=(TextView) convertView.findViewById(R.id.firstColumn);
-            //holder.txtSecond=(TextView) convertView.findViewById(R.id.secondColumn);
-            //holder.txtThird=(TextView) convertView.findViewById(R.id.thirdColumn);
-            //holder.txtFourth=(TextView) convertView.findViewById(R.id.fourthColumn);
 
             convertView.setTag(holder);
         }else{
@@ -119,10 +111,6 @@ public class ListViewAdapter extends BaseAdapter {
             }
             //holder.txtLayout[i] = (TextView) convertView.findViewById(itemIDs[i]);
         }
-        //holder.txtFirst.setText(map.get(FIRST_COLUMN));
-        //holder.txtSecond.setText(map.get(SECOND_COLUMN));
-        //holder.txtThird.setText(map.get(THIRD_COLUMN));
-        //holder.txtFourth.setText(map.get(FOURTH_COLUMN));
 
         return convertView;
     }

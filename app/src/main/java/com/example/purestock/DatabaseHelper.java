@@ -25,7 +25,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TRANSACTIONS_COL_4 = "PRICE";
     // Add stock number column (04/17/2019)
     private static final String TRANSACTIONS_COL_5 = "NUMBER_STOCK";
-
     private static final String TRANSACTIONS_COL_6 = "TYPE";
     private static final String TRANSACTIONS_COL_7 = "DATE";
     public static final String WATCHLISTS_TABLE = "WATCHLISTS";
@@ -292,7 +291,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(NOTES_COL_3, date);
         contentValues.put(NOTES_COL_4, username);
 
-        long result = db.update(STOCKS_TABLE, contentValues, NOTES_COL_1 + " = ?", new String[] {Integer.toString(noteID)});
+        long result = db.update(NOTES_TABLE, contentValues, NOTES_COL_1 + " = ?", new String[] {Integer.toString(noteID)});
 
         if(result == 0)
             return false;

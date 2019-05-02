@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/notes_listview_display_first_column"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="4"
+        android:textSize="24dp"
+        android:text="First"/>
+
+    <TextView
+        android:id="@+id/notes_listview_display_second_column"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1.7"
+        android:textSize="22dp"
+        android:textAlignment="viewEnd"
+        android:text="Second"/>
+</LinearLayout >

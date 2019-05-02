@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".GainLoss">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/gainloss_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary">
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        >
+        <TextView
+            android:layout_weight="0.6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="@string/gainloss_start_date"/>
+        <TextView
+            android:id="@+id/start_date"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:textSize="20dp"
+            android:text="@string/gainloss_select_start_date" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        >
+        <TextView
+            android:layout_weight="0.6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="@string/gainloss_end_date"/>
+        <TextView
+            android:id="@+id/end_date"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:textSize="20dp"
+            android:text="@string/gainloss_select_end_date"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#21618C"
+        android:id="@+id/gainloss_listview_display_title"
+        >
+        <TextView
+            android:id="@+id/gainloss_listview_display_title1"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1.2"
+            android:textSize="16dp"
+            android:textAlignment="gravity"
+            android:textColor="#D0D3D4"
+            android:text="Symbol"/>
+
+        <TextView
+            android:id="@+id/gainloss_listview_display_title2"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="0.6"
+            android:textSize="16dp"
+            android:textAlignment="gravity"
+            android:textColor="#D0D3D4"
+            android:text="Shares"/>
+
+        <TextView
+            android:id="@+id/gainloss_listview_display_title3"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="0.7"
+            android:textSize="16dp"
+            android:textAlignment="gravity"
+            android:textColor="#D0D3D4"
+            android:text="Average Bought Price"/>
+
+        <TextView
+            android:id="@+id/gainloss_listview_display_title4"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="0.7"
+            android:textSize="16dp"
+            android:textAlignment="gravity"
+            android:textColor="#D0D3D4"
+            android:text="Current Price"/>
+        <TextView
+            android:id="@+id/gainloss_listview_display_title5"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:textSize="16dp"
+            android:textAlignment="gravity"
+            android:textColor="#D0D3D4"
+            android:text="Gain Loss"/>
+    </LinearLayout >
+
+        <ListView
+            android:id="@+id/gainloss_display_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/gainloss_listview_display_title"
+            android:divider="#806326"
+            android:background="#D0D3D4"
+            android:dividerHeight="1dp">
+        </ListView>
+
+</LinearLayout>

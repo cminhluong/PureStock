@@ -5,19 +5,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_gravity="center"
-    android:padding="10dp"
     tools:context=".Fragement.NoteFragment">
 
-
-
-    <Button
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/notes_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_note"
-        android:text="Add_Note"
-        android:textColor="@color/colorPrimary"
-        android:background="@drawable/button_background"
-        android:layout_marginTop="15dp"/>
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary">
+
+        <ImageButton
+            android:id="@+id/notes_add"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="right"
+            android:background="@drawable/ic_add_note" />
+    </android.support.v7.widget.Toolbar>
+
+    <ListView
+        android:id="@+id/notes_display_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/notes_add"
+        android:divider="#806326"
+        android:background="#D0D3D4"
+        android:dividerHeight="1dp">
+    </ListView>
+
 
 
 </LinearLayout>

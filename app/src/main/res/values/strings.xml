@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">PureStock</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="gainloss_select_start_date">Select Start Date</string>
+    <string name="gainloss_select_end_date">Select End Date</string>
+    <string name="gainloss_start_date">Start Date</string>
+    <string name="gainloss_end_date">End Date</string>
 </resources>
